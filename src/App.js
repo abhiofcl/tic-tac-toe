@@ -3,10 +3,16 @@ import { StrictMode } from "react";
 import { useState } from "react";
 function App() {
   const [squares, setSquares] = useState(Array(9).fill(null));
+  const [xIsnext, setXIsNext] = useState(true);
   function handleClick(i) {
     const nextSquares = squares.slice();
-    nextSquares[i] = "X";
+    if (xIsnext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
     setSquares(nextSquares);
+    setXIsNext(!xIsnext);
   }
   return (
     <>
