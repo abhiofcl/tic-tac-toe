@@ -1,29 +1,40 @@
 import "./App.css";
-import { StrictMode } from "react";
 import { useState } from "react";
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
 function App() {
+  const [xIsNext, setXIsNext] = useState(true);
   const [squares, setSquares] = useState(Array(9).fill(null));
-  const [xIsnext, setXIsNext] = useState(true);
-  const winner = calculateWinner(squares);
-  let status;
-  if (winner) {
-    status = "Winner : " + winner;
-  } else {
-    status = "Next player : " + (xIsnext ? "X" : "O");
-  }
+
   function handleClick(i) {
-    if (squares[i] || calculateWinner(squares)) {
+    if (calculateWinner(squares) || squares[i]) {
       return;
     }
     const nextSquares = squares.slice();
-    if (xIsnext) {
+    if (xIsNext) {
       nextSquares[i] = "X";
     } else {
       nextSquares[i] = "O";
     }
     setSquares(nextSquares);
-    setXIsNext(!xIsnext);
+    setXIsNext(!xIsNext);
   }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) {
+    status = "Winner: " + winner;
+  } else {
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
   return (
     <>
       <div className="status">{status}</div>
@@ -45,6 +56,7 @@ function App() {
     </>
   );
 }
+
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],
@@ -58,17 +70,11 @@ function calculateWinner(squares) {
   ];
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] && squares[c]) {
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
       return squares[a];
     }
   }
   return null;
 }
-function Square({ value, onSquareClick }) {
-  return (
-    <button className="square" onClick={onSquareClick}>
-      {value}
-    </button>
-  );
-}
+
 export default App;
